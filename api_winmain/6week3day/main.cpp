@@ -1,5 +1,8 @@
 #include <windows.h>
 
+// 라이브러리 추가
+#pragma comment(lib, "msimg32.lib")
+
 // LRESULT(Long Result) : Windows API에서 메시지 처리 함수(WndProc)가 반환하는 값의 데이터 타입
 // CALLBACK : 함수 호출 규약을 나타내며, Windows API에서 사용하는 표준 호출 규약
 // == __stdcall -> 피호출자가 스택을 정리, 전달받은 매개변수중 우측에 있는 것부터 매개변수 스텍에 쌓음
@@ -79,23 +82,99 @@ void DrawBitmapToBuffer(HWND hWnd, HDC hBufferDC, int x, int y, HBITMAP hbit)
 
 }
 
+void DrawBitmapToBufferColorKey(HWND hWnd, HDC hBufferDC, int x, int y, HBITMAP hBit)
+{
+	HDC hDC = GetDC(hWnd);
+
+	HDC hTempDC = CreateCompatibleDC(hDC);
+
+	HBITMAP hOldBit = (HBITMAP)SelectObject(hTempDC, hBit);
+
+	BITMAP bitmap;
+	GetObject(hBit, sizeof(BITMAP), &bitmap);
+
+	// bitmap에서 흰색을 제거하고 그리는 함수
+	TransparentBlt(hBufferDC, x, y, bitmap.bmWidth, bitmap.bmHeight,
+		hTempDC, 0, 0, bitmap.bmWidth, bitmap.bmHeight, RGB(255, 255, 255));
+
+	SelectObject(hTempDC, hOldBit);
+	DeleteDC(hTempDC);
+
+	ReleaseDC(hWnd, hDC);
+}
 
 // 그림
 HBITMAP hBackBitmap; // test.bmp
 HBITMAP hBarBitmap; // bar.bmp
+HBITMAP hBallBitmap;  //ball.bmp
 
 HANDLE hTimer;
 
 // 백버퍼 (화면 변수) -> 위의 그림을 백버퍼에 찍음
-HBITMAP hBitMapBuffer;
-
 // 백버퍼는 프론트버퍼와 매 프레임마다 데이터를 교환하면서 프론트버퍼가 화면에 출력됨
+HBITMAP hBitMapBuffer;
 
 RECT crt;
 
 int g_Bar_X = 200;
 
+enum BALL_DIR_X
+{
+	eRIGHT,
+	eLEFT
+};
+
+enum BALL_DIR_Y
+{
+	eDOWN,
+	eUP
+};
+
+int g_Ball_X = 0;
+int g_Ball_Y = 100;
+
 #define TIMERID 1
+
+BALL_DIR_X eDirX = eRIGHT;
+BALL_DIR_Y eDirY = eDOWN;
+
+//공을 움직이는 함수
+void BallMove()
+{
+	if (eDirX == eRIGHT)
+	{
+		g_Ball_X += 5;
+		if (g_Ball_X > (1024 - 39)) // 39는 공의 x축 크기
+		{
+			eDirX = eLEFT;
+		}
+	}
+	else if (eDirX == eLEFT)
+	{
+		g_Ball_X -= 5;
+		if (g_Ball_X < (0))
+		{
+			eDirX = eRIGHT;
+		}
+	}
+
+	if (eDirY == eDOWN)
+	{
+		g_Ball_Y += 5;
+		if (g_Ball_Y > (768 - 39)) // 39는 공의 x축 크기
+		{
+			eDirY = eUP;
+		}
+	}
+	else if (eDirY == eUP)
+	{
+		g_Ball_Y -= 5;
+		if (g_Ball_Y < (0))
+		{
+			eDirY = eDOWN;
+		}
+	}
+}
 
 // 윈도우 프로시저 함수 정의
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lparam)
@@ -126,8 +205,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lparam)
 		// 윈도우 생성시 날아오는 메세지
 	case WM_CREATE:
 	{
+		// 이미지 가져오기
 		hBackBitmap = (HBITMAP)LoadImage(NULL, L"test.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 		hBarBitmap = (HBITMAP)LoadImage(NULL, L"Bar.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+		hBallBitmap = (HBITMAP)LoadImage(NULL, L"Ball.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 
 		// 일정시간마다  WM_TIMER를 메세지 큐에 보내도록 요청
 		hTimer = (HANDLE)SetTimer(hWnd, TIMERID, 1, NULL);
@@ -135,10 +216,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lparam)
 		// ClientRect : window의 안쪽 사각형 영역을 반환하여 crt를 할당
 		GetClientRect(hWnd, &crt);
 	}
+	break;
+	
 
 	// SetTimer로 일정시간마다 메세지큐에 들어감
 	case WM_TIMER:
 	{
+		BallMove();
+
 		HDC hDC = GetDC(hWnd);
 
 		// MemDC랑 같은 역할
@@ -158,6 +243,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lparam)
 		//그리기
 		DrawBitmapToBuffer(hWnd, hBufferDC, 0, 0, hBackBitmap);
 		DrawBitmapToBuffer(hWnd, hBufferDC, g_Bar_X, 0, hBarBitmap);
+		DrawBitmapToBufferColorKey(hWnd, hBufferDC, g_Ball_X, g_Ball_Y, hBallBitmap);
 
 		// 이전상태 복귀
 		SelectObject(hBufferDC, hOldBitmap); 
@@ -169,6 +255,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lparam)
 		ReleaseDC(hWnd, hDC);
 
 		InvalidateRect(hWnd, NULL, true); // WM_PAINT를 OS에 요청
+	}
+	break;
+
+	case WM_KEYDOWN:
+	{
+		switch (wParam)
+		{
+		case VK_LEFT: g_Bar_X -= 10; break;
+		case VK_RIGHT: g_Bar_X += 10; break;
+		default: break;
+		}
 	}
 	break;
 
@@ -224,7 +321,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lparam)
 	break;
 
 	case WM_ERASEBKGND:
+	{
 		return true;
+	}
+	break;
+		
 
 	case WM_DESTROY : // x버튼 클릭시하는 경우
 	{
@@ -232,7 +333,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lparam)
 		return NULL;
 	}
 	break;
-		
+
+	default: break;
 	}
 
 	// (Default Window Procedure) : 

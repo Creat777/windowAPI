@@ -104,8 +104,6 @@ enum BALL_DIR_Y
 	eUP
 };
 
-
-
 int g_Ball_X = 0;
 int g_Ball_Y = 100;
 
@@ -214,6 +212,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		default: break;
 		}
 	}
+	break;
 
 	case WM_PAINT:
 	{
@@ -235,13 +234,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		EndPaint(hWnd, &ps);
 		return 0;
 	}
+	break;
 
 	case WM_ERASEBKGND:
+	{
 		return true;
+	}
+	break;
 	
 	case WM_DESTROY:
+	{
 		PostQuitMessage(0); // 메시지 큐에 WM_QUIT가 들어간다.
 		return 0;
+	}
+	break;
+		
 
 	default: break;
 	}
