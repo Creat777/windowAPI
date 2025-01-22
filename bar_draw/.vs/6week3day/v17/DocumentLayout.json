@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\YoonChangJun\\GithubMemory\\windowAPI\\bar_draw\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{CF26B5F8-2B39-4E37-B559-F1BA49F1916C}|6week3day\\6week3day.vcxproj|D:\\YoonChangJun\\GithubMemory\\windowAPI\\bar_draw\\6week3day\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF26B5F8-2B39-4E37-B559-F1BA49F1916C}|6week3day\\6week3day.vcxproj|solutionrelative:6week3day\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "D:\\YoonChangJun\\GithubMemory\\windowAPI\\bar_draw\\6week3day\\main.cpp",
+              "RelativeDocumentMoniker": "6week3day\\main.cpp",
+              "ToolTip": "D:\\YoonChangJun\\GithubMemory\\windowAPI\\bar_draw\\6week3day\\main.cpp",
+              "RelativeToolTip": "6week3day\\main.cpp",
+              "ViewState": "AgIAALcAAAAAAAAAAAAkwMoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-22T02:01:26.743Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
