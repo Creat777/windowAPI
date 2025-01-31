@@ -1,6 +1,9 @@
-﻿  main.cpp
-D:\YoonChangJun\GithubMemory\windowAPI\bar_draw\6week3day\main.cpp(34,44): warning C4805: '==': 연산에 'BOOL' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-D:\YoonChangJun\GithubMemory\windowAPI\bar_draw\6week3day\main.cpp(159,9): warning C4101: 'bit' :참조되지 않은 지역 변수입니다.
-D:\YoonChangJun\GithubMemory\windowAPI\bar_draw\6week3day\main.cpp(160,10): warning C4101: 'by' :참조되지 않은 지역 변수입니다.
-D:\YoonChangJun\GithubMemory\windowAPI\bar_draw\6week3day\main.cpp(160,6): warning C4101: 'bx' :참조되지 않은 지역 변수입니다.
+﻿  GameManager.cpp
+D:\YoonChangJun\GithubMemory\windowAPI\bar_draw\6week3day\GameManager.cpp(60,34): warning C4805: '==': 연산에 'BOOL' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+  main.cpp
+D:\YoonChangJun\GithubMemory\windowAPI\bar_draw\6week3day\main.cpp(42,44): warning C4805: '==': 연산에 'BOOL' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+D:\YoonChangJun\GithubMemory\windowAPI\bar_draw\6week3day\main.cpp(154,9): warning C4101: 'bit' :참조되지 않은 지역 변수입니다.
+D:\YoonChangJun\GithubMemory\windowAPI\bar_draw\6week3day\main.cpp(155,10): warning C4101: 'by' :참조되지 않은 지역 변수입니다.
+D:\YoonChangJun\GithubMemory\windowAPI\bar_draw\6week3day\main.cpp(155,6): warning C4101: 'bx' :참조되지 않은 지역 변수입니다.
+  코드를 생성하고 있습니다...
   6week3day.vcxproj -> D:\YoonChangJun\GithubMemory\windowAPI\bar_draw\x64\Debug\6week3day.exe

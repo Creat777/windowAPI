@@ -1,10 +1,18 @@
 #include <windows.h>
+#include "GameManager.h"
+
+// windowAPI를 공부하는 이유는 directX를 다루기 위한 중간과정이다
+// 프로그램개발에서 windowAPI는 c스타일 이고 C++은 MFC를 주로 사용한다
+// 요즘 추세는 프로그램 개발에 C#을 주로 사용한다.
 
 // 라이브러리 추가
 #pragma comment(lib, "msimg32.lib")
 
+cGameManager g_GameMng;
+
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM); //콜백 함수 - 윈도우 메시지 처리 함수
 
+// windowAPI의 자동실행 함수
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevIns, LPSTR lpCmdLine, int nCmdShow)
 {
 	// 레지스트리
@@ -40,6 +48,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevIns, LPSTR lpCmdLine, int
 	return (int)msg.wParam;
 }
 
+/*
 void DrawBitmapToBuffer(HWND hWnd, HDC hBufferDC, int x, int y, HBITMAP hBit)
 {
 	HDC hDC = GetDC(hWnd);
@@ -58,7 +67,9 @@ void DrawBitmapToBuffer(HWND hWnd, HDC hBufferDC, int x, int y, HBITMAP hBit)
 
 	ReleaseDC(hWnd, hDC);
 }
+*/
 
+/*
 void DrawBitmapToBufferColorKey(HWND hWnd, HDC hBufferDC, int x, int y, HBITMAP hBit)
 {
 	HDC hDC = GetDC(hWnd);
@@ -79,6 +90,7 @@ void DrawBitmapToBufferColorKey(HWND hWnd, HDC hBufferDC, int x, int y, HBITMAP 
 
 	ReleaseDC(hWnd, hDC);
 }
+*/
 
 HBITMAP hBackBitmap; //test.bmp
 HBITMAP hBarBitmap;  //bar.bmp
@@ -90,28 +102,10 @@ HBITMAP hBitMapBuffer;
 
 RECT crt;
 
-int g_Bar_X = 200;
-
-enum BALL_DIR_X
-{
-	eRIGHT,
-	eLEFT
-};
-
-enum BALL_DIR_Y
-{
-	eDOWN,
-	eUP
-};
-
-int g_Ball_X = 0;
-int g_Ball_Y = 100;
-
 #define TIMERID 1
 
-BALL_DIR_X eDirX = eRIGHT;
-BALL_DIR_Y eDirY = eDOWN;
 
+/*
 //공을 움직이는 함수
 void BallMove()
 {
@@ -149,6 +143,7 @@ void BallMove()
 		}
 	}
 }
+*/
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -163,6 +158,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_CREATE:
 	{
+		RECT window_rc;
+
+		// 윈도우 바깥쪽 프레임을 계산
+		GetWindowRect(hWnd, &window_rc);
+
+		// 실 사용하는 창의 크기
+		GetClientRect(hWnd, &crt);
+
+		int delta_x = (window_rc.right - window_rc.left) - crt.right;
+		int delta_y = (window_rc.bottom - window_rc.top) - crt.bottom;
+
+		SetWindowPos(hWnd, 0, 0, 0, 1024 + delta_x, 768 + delta_y, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+
 		// 이미지 가져오기
 		hBackBitmap = (HBITMAP)LoadImage(NULL, L"test.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 		hBarBitmap = (HBITMAP)LoadImage(NULL, L"Bar.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
@@ -176,7 +184,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	
 	case WM_TIMER:
 	{
-		BallMove();
+		g_GameMng.BallMove();
+		g_GameMng.CollisionBallAndBar();
 
 		HDC hDC = GetDC(hWnd);
 
@@ -190,9 +199,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		HBITMAP hOldBitmap = (HBITMAP)SelectObject(hBufferDC, hBitMapBuffer);
 
 		// 그리기
-		DrawBitmapToBuffer(hWnd, hBufferDC, 0, 0, hBackBitmap);
-		DrawBitmapToBuffer(hWnd, hBufferDC, g_Bar_X, 680, hBarBitmap);
-		DrawBitmapToBufferColorKey(hWnd, hBufferDC, g_Ball_X, g_Ball_Y, hBallBitmap);
+		g_GameMng.DrawBitmapToBuffer(hWnd, hBufferDC, 0, 0, hBackBitmap);
+		g_GameMng.DrawBitmapToBuffer(hWnd, hBufferDC, g_GameMng.m_Bar_X, g_GameMng.m_Bar_Y, hBarBitmap);
+		g_GameMng.DrawBitmapToBufferColorKey(hWnd, hBufferDC, g_GameMng.m_Ball_X, g_GameMng.m_Ball_Y, hBallBitmap);
 
 		SelectObject(hBufferDC, hOldBitmap);
 		DeleteDC(hBufferDC);
@@ -207,8 +216,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		switch (wParam)
 		{
-		case VK_LEFT: g_Bar_X -= 10; break;
-		case VK_RIGHT: g_Bar_X += 10; break;
+		case VK_LEFT: g_GameMng.m_Bar_X -= 10; break;
+		case VK_RIGHT: g_GameMng.m_Bar_X += 10; break;
 		default: break;
 		}
 	}

@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "D:\\YoonChangJun\\GithubMemory\\windowAPI\\bar_draw\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{CF26B5F8-2B39-4E37-B559-F1BA49F1916C}|6week3day\\6week3day.vcxproj|D:\\YoonChangJun\\GithubMemory\\windowAPI\\bar_draw\\6week3day\\GameManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF26B5F8-2B39-4E37-B559-F1BA49F1916C}|6week3day\\6week3day.vcxproj|solutionrelative:6week3day\\GameManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CF26B5F8-2B39-4E37-B559-F1BA49F1916C}|6week3day\\6week3day.vcxproj|D:\\YoonChangJun\\GithubMemory\\windowAPI\\bar_draw\\6week3day\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{CF26B5F8-2B39-4E37-B559-F1BA49F1916C}|6week3day\\6week3day.vcxproj|solutionrelative:6week3day\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF26B5F8-2B39-4E37-B559-F1BA49F1916C}|6week3day\\6week3day.vcxproj|D:\\YoonChangJun\\GithubMemory\\windowAPI\\bar_draw\\6week3day\\GameManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF26B5F8-2B39-4E37-B559-F1BA49F1916C}|6week3day\\6week3day.vcxproj|solutionrelative:6week3day\\GameManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,12 +31,38 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "GameManager.h",
+              "DocumentMoniker": "D:\\YoonChangJun\\GithubMemory\\windowAPI\\bar_draw\\6week3day\\GameManager.h",
+              "RelativeDocumentMoniker": "6week3day\\GameManager.h",
+              "ToolTip": "D:\\YoonChangJun\\GithubMemory\\windowAPI\\bar_draw\\6week3day\\GameManager.h",
+              "RelativeToolTip": "6week3day\\GameManager.h",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAQwBAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-24T02:10:23.736Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "GameManager.cpp",
+              "DocumentMoniker": "D:\\YoonChangJun\\GithubMemory\\windowAPI\\bar_draw\\6week3day\\GameManager.cpp",
+              "RelativeDocumentMoniker": "6week3day\\GameManager.cpp",
+              "ToolTip": "D:\\YoonChangJun\\GithubMemory\\windowAPI\\bar_draw\\6week3day\\GameManager.cpp",
+              "RelativeToolTip": "6week3day\\GameManager.cpp",
+              "ViewState": "AgIAADIAAAAAAAAAAAAgwD8AAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-24T02:10:37.457Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "main.cpp",
               "DocumentMoniker": "D:\\YoonChangJun\\GithubMemory\\windowAPI\\bar_draw\\6week3day\\main.cpp",
               "RelativeDocumentMoniker": "6week3day\\main.cpp",
               "ToolTip": "D:\\YoonChangJun\\GithubMemory\\windowAPI\\bar_draw\\6week3day\\main.cpp",
               "RelativeToolTip": "6week3day\\main.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAALcAAAAAAAAAAAAQwMoAAABRAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-01-22T02:01:26.743Z",
               "EditorCaption": ""
