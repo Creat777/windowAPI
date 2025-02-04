@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include "Block.h"
 
 enum BALL_DIR_X
 {
@@ -26,12 +27,18 @@ private :
 	BALL_DIR_X eDirX = eRIGHT;
 	BALL_DIR_Y eDirY = eDOWN;
 
+	int BlockCount;
+	cBlock BlockArray[1];
+
 public :
 	cGameManager();
 	~cGameManager();
 
 	void BallMove();
 	void CollisionBallAndBar();
+
+	void CreateBlock();
+	void DrawBlock(HWND hWnd, HDC hBufferDC);
 
 	void DrawBitmapToBuffer(HWND hWnd, HDC hBufferDC, int x, int y, HBITMAP hBit);
 	void DrawBitmapToBufferColorKey(HWND hWnd, HDC hBufferDC, int x, int y, HBITMAP hBit);

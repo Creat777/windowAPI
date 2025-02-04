@@ -1,15 +1,17 @@
 #include <windows.h>
 #include "GameManager.h"
+#include "Block.h"
 
 // windowAPI를 공부하는 이유는 directX를 다루기 위한 중간과정이다
 // 프로그램개발에서 windowAPI는 c스타일 이고 C++은 MFC를 주로 사용한다
-// 요즘 추세는 프로그램 개발에 C#을 주로 사용한다.
+// 요즘 추세는 프로그램 개발에 C#(.net)을 주로 사용한다.
 
 // 라이브러리 추가
 #pragma comment(lib, "msimg32.lib")
 
 cGameManager g_GameMng;
 
+// CALLBACK : 함수호출 규약 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM); //콜백 함수 - 윈도우 메시지 처리 함수
 
 // windowAPI의 자동실행 함수
@@ -176,6 +178,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		hBarBitmap = (HBITMAP)LoadImage(NULL, L"Bar.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 		hBallBitmap = (HBITMAP)LoadImage(NULL, L"Ball.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 
+		g_GameMng.CreateBlock();
+
 		hTimer = (HANDLE)SetTimer(hWnd, TIMERID, 1, NULL);
 
 		GetClientRect(hWnd, &crt);
@@ -202,6 +206,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		g_GameMng.DrawBitmapToBuffer(hWnd, hBufferDC, 0, 0, hBackBitmap);
 		g_GameMng.DrawBitmapToBuffer(hWnd, hBufferDC, g_GameMng.m_Bar_X, g_GameMng.m_Bar_Y, hBarBitmap);
 		g_GameMng.DrawBitmapToBufferColorKey(hWnd, hBufferDC, g_GameMng.m_Ball_X, g_GameMng.m_Ball_Y, hBallBitmap);
+
+		g_GameMng.DrawBlock(hWnd, hBufferDC);
 
 		SelectObject(hBufferDC, hOldBitmap);
 		DeleteDC(hBufferDC);
@@ -253,6 +259,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	
 	case WM_DESTROY:
 	{
+		DeleteObject(hBackBitmap);
+		DeleteObject(hBallBitmap);
+		DeleteObject(hBarBitmap);
+
+		DeleteObject(hBitMapBuffer);
+
+		KillTimer(hWnd, TIMERID);
+
 		PostQuitMessage(0); // 메시지 큐에 WM_QUIT가 들어간다.
 		return 0;
 	}

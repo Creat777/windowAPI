@@ -1,3 +1,4 @@
+#include "Block.h"
 #include "GameManager.h"
 
 cGameManager::cGameManager()
@@ -72,6 +73,16 @@ void cGameManager::CollisionBallAndBar()
 			eDirY = eDOWN;
 		}
 	}
+}
+
+void cGameManager::CreateBlock()
+{
+	BlockArray[0].Init(10, 10);
+}
+
+void cGameManager::DrawBlock(HWND hWnd, HDC hBufferDC)
+{
+	BlockArray[0].Draw(hWnd, hBufferDC);
 }
 
 void cGameManager::DrawBitmapToBuffer(HWND hWnd, HDC hBufferDC, int x, int y, HBITMAP hBit)
