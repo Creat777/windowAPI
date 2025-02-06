@@ -143,11 +143,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="GameManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

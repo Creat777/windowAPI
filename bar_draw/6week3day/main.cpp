@@ -1,6 +1,10 @@
 #include <windows.h>
-#include "GameManager.h"
+#include <gdiplus.h>
+
 #include "Block.h"
+#include "Effect.h"
+#include "GameManager.h"
+
 
 // windowAPI를 공부하는 이유는 directX를 다루기 위한 중간과정이다
 // 프로그램개발에서 windowAPI는 c스타일 이고 C++은 MFC를 주로 사용한다
@@ -8,6 +12,9 @@
 
 // 라이브러리 추가
 #pragma comment(lib, "msimg32.lib")
+#pragma comment(lib, "gdiplus.lib")
+
+using namespace Gdiplus;
 
 cGameManager g_GameMng;
 
@@ -50,53 +57,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevIns, LPSTR lpCmdLine, int
 	return (int)msg.wParam;
 }
 
-/*
-void DrawBitmapToBuffer(HWND hWnd, HDC hBufferDC, int x, int y, HBITMAP hBit)
-{
-	HDC hDC = GetDC(hWnd);
 
-	HDC hTempDC = CreateCompatibleDC(hDC);
-
-	HBITMAP hOldBit = (HBITMAP)SelectObject(hTempDC, hBit);
-
-	BITMAP bitmap;
-	GetObject(hBit, sizeof(BITMAP), &bitmap);
-
-	BitBlt(hBufferDC, x, y, bitmap.bmWidth, bitmap.bmHeight, hTempDC, 0, 0, SRCCOPY);
-
-	SelectObject(hTempDC, hOldBit);
-	DeleteDC(hTempDC);
-
-	ReleaseDC(hWnd, hDC);
-}
-*/
-
-/*
-void DrawBitmapToBufferColorKey(HWND hWnd, HDC hBufferDC, int x, int y, HBITMAP hBit)
-{
-	HDC hDC = GetDC(hWnd);
-
-	HDC hTempDC = CreateCompatibleDC(hDC);
-
-	HBITMAP hOldBit = (HBITMAP)SelectObject(hTempDC, hBit);
-
-	BITMAP bitmap;
-	GetObject(hBit, sizeof(BITMAP), &bitmap);
-
-	// bitmap에서 흰색을 제거하는 함수
-	TransparentBlt(hBufferDC, x, y, bitmap.bmWidth, bitmap.bmHeight,
-		hTempDC, 0, 0, bitmap.bmWidth, bitmap.bmHeight, RGB(255, 255, 255));
-
-	SelectObject(hTempDC, hOldBit);
-	DeleteDC(hTempDC);
-
-	ReleaseDC(hWnd, hDC);
-}
-*/
-
-HBITMAP hBackBitmap; //test.bmp
-HBITMAP hBarBitmap;  //bar.bmp
-HBITMAP hBallBitmap;  //ball.bmp
+//HBITMAP hBackBitmap; //test.bmp
+//HBITMAP hBarBitmap;  //bar.bmp
+//HBITMAP hBallBitmap;  //ball.bmp
 
 HANDLE hTimer;
 
@@ -105,6 +69,9 @@ HBITMAP hBitMapBuffer;
 RECT crt;
 
 #define TIMERID 1
+
+ULONG_PTR gdiplusToken;
+GdiplusStartupInput gdiPlusStartupInput;
 
 
 /*
@@ -174,11 +141,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		SetWindowPos(hWnd, 0, 0, 0, 1024 + delta_x, 768 + delta_y, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 
 		// 이미지 가져오기
-		hBackBitmap = (HBITMAP)LoadImage(NULL, L"test.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+		/*hBackBitmap = (HBITMAP)LoadImage(NULL, L"test.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 		hBarBitmap = (HBITMAP)LoadImage(NULL, L"Bar.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-		hBallBitmap = (HBITMAP)LoadImage(NULL, L"Ball.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+		hBallBitmap = (HBITMAP)LoadImage(NULL, L"Ball.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);*/
 
 		g_GameMng.CreateBlock();
+
+		GdiplusStartup(&gdiplusToken, &gdiPlusStartupInput, NULL);
+
+		g_GameMng.InitEffect(0,0);
 
 		hTimer = (HANDLE)SetTimer(hWnd, TIMERID, 1, NULL);
 
@@ -190,6 +161,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		g_GameMng.BallMove();
 		g_GameMng.CollisionBallAndBar();
+		g_GameMng.CollisionBallAndBlock();
 
 		HDC hDC = GetDC(hWnd);
 
@@ -203,11 +175,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		HBITMAP hOldBitmap = (HBITMAP)SelectObject(hBufferDC, hBitMapBuffer);
 
 		// 그리기
-		g_GameMng.DrawBitmapToBuffer(hWnd, hBufferDC, 0, 0, hBackBitmap);
-		g_GameMng.DrawBitmapToBuffer(hWnd, hBufferDC, g_GameMng.m_Bar_X, g_GameMng.m_Bar_Y, hBarBitmap);
-		g_GameMng.DrawBitmapToBufferColorKey(hWnd, hBufferDC, g_GameMng.m_Ball_X, g_GameMng.m_Ball_Y, hBallBitmap);
+		g_GameMng.DrawBitmapToBuffer(hWnd, hBufferDC, 0, 0, g_GameMng.hBackBitmap);
+		g_GameMng.DrawBitmapToBuffer(hWnd, hBufferDC, g_GameMng.m_Bar_X, g_GameMng.m_Bar_Y, g_GameMng.hBarBitmap);
+		g_GameMng.DrawBitmapToBufferColorKey(hWnd, hBufferDC, g_GameMng.m_Ball_X, g_GameMng.m_Ball_Y, g_GameMng.hBallBitmap);
 
 		g_GameMng.DrawBlock(hWnd, hBufferDC);
+		g_GameMng.DrawEffect(hWnd, hBufferDC);
 
 		SelectObject(hBufferDC, hOldBitmap);
 		DeleteDC(hBufferDC);
@@ -259,9 +232,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	
 	case WM_DESTROY:
 	{
-		DeleteObject(hBackBitmap);
+		/*DeleteObject(hBackBitmap);
 		DeleteObject(hBallBitmap);
-		DeleteObject(hBarBitmap);
+		DeleteObject(hBarBitmap);*/
 
 		DeleteObject(hBitMapBuffer);
 

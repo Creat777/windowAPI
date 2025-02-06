@@ -1,8 +1,11 @@
 #include "Block.h"
 
+
+
 cBlock::cBlock()
 {
 	m_hBitmap = (HBITMAP)LoadImage(NULL, L"block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	m_bLive = true;
 }
 
 cBlock::~cBlock()
@@ -39,4 +42,14 @@ void cBlock::Draw(HWND hWnd, HDC hBufferDC)
 
 	// 실제 화면의 반환
 	ReleaseDC(hWnd, hDC);
+}
+
+RECT cBlock::GetRect()
+{
+	BITMAP bitmap;
+	GetObject(m_hBitmap, sizeof(BITMAP), &bitmap);
+
+
+	RECT rect = { m_x, m_y , m_x + bitmap.bmWidth, m_y + bitmap.bmHeight };
+	return rect;
 }

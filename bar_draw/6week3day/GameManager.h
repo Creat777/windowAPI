@@ -1,6 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include "Block.h"
+#include "Effect.h"
+#define BlockCount 7
 
 enum BALL_DIR_X
 {
@@ -23,12 +25,20 @@ public :
 	int m_Ball_X = 0;
 	int m_Ball_Y = 0;
 
+	// 이미지
+	HBITMAP hBackBitmap; //test.bmp
+	HBITMAP hBarBitmap;  //bar.bmp
+	HBITMAP hBallBitmap;  //ball.bmp
+
+	// 이미지 정보
+
 private :
 	BALL_DIR_X eDirX = eRIGHT;
 	BALL_DIR_Y eDirY = eDOWN;
 
-	int BlockCount;
-	cBlock BlockArray[1];
+	cBlock BlockArray[BlockCount];
+
+	cEffect m_Effect;
 
 public :
 	cGameManager();
@@ -36,9 +46,13 @@ public :
 
 	void BallMove();
 	void CollisionBallAndBar();
+	void CollisionBallAndBlock();
 
 	void CreateBlock();
 	void DrawBlock(HWND hWnd, HDC hBufferDC);
+
+	void InitEffect(int x, int y);
+	void DrawEffect(HWND hWnd, HDC hBufferDC);
 
 	void DrawBitmapToBuffer(HWND hWnd, HDC hBufferDC, int x, int y, HBITMAP hBit);
 	void DrawBitmapToBufferColorKey(HWND hWnd, HDC hBufferDC, int x, int y, HBITMAP hBit);
